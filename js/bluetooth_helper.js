@@ -80,9 +80,9 @@
             return characteristic.uuid === BLESHIELD_TX_UUID;
           });
           if (this.writeChar && Array.isArray(this.notifyChar.descriptors)) {
+            console.log('bluetoothready');
             window.dispatchEvent(new CustomEvent('bluetoothready'));
             this.isConnected = true;
-            console.log('bluetoothready');
           } else {
             // XXX: Workaround to retry to connect the BLE server.
             this._disconnectBleServer().then(() => {

@@ -1,6 +1,9 @@
 (function(exports) {
   'use strict';
 
+  var MATRIX_WIDTH = 8;
+  var MATRIX_HEIGHT = 8;
+
   function LedMatrixHelper(bluetooth) {
     this._initMatrix();
     this._bluetooth = bluetooth;
@@ -11,26 +14,35 @@
     _bluetooth: null,
 
     render: function() {
-      var data;
-      var i, j;
-      for (i = 0; i < 8; i++) {
-        for (j = 0; j < 8; j++) {
+      var data = '';
+      var i, j, value;
+      for (i = 0; i < MATRIX_WIDTH; i++) {
+        value = 0;
+        for (j = 0; j < MATRIX_HEIGHT; j++) {
           if (this.matrix[i][j]) {
-            data += (1 << j);
+            value += 1 << j;
           }
         }
-        // XXX: Fix me.
-        data = i.toString(16) + data.toString(16);
-        console.log('LED Matrix data: ' + data);
-        this._bluetooth.sendData('0204');
+        data += this._paddingLeft(i.toString(16), 2) +
+                this._paddingLeft(value.toString(16), 2);
+      }
+      console.log('LED Matrix data: ' + data);
+      this._bluetooth.sendData(data);
+    },
+
+    _paddingLeft: function(str, lenght) {
+      if (str.length >= lenght) {
+        return str;
+      } else {
+        return this._paddingLeft('0' + str, lenght);
       }
     },
 
     _initMatrix: function() {
       this.matrix = [];
-      for (var i = 0; i < 8; i++) {
+      for (var i = 0; i < MATRIX_WIDTH; i++) {
         this.matrix[i] = [];
-        for (var j = 0; j < 8; j++) {
+        for (var j = 0; j < MATRIX_HEIGHT; j++) {
           this.matrix[i][j] = 0;
         }
       }
