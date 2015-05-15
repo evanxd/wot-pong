@@ -14,15 +14,16 @@
 
   BluetoothHelper.prototype = {
     address: null,
-    writeChar: null,
-    notifyChar: null,
-    gatt: null,
+    name: null,
     isConnected: false,
     _bluetooth: null,
+    _gatt: null,
+    _writeChar: null,
+    _notifyChar: null,
 
     sendData: function(data) {
       data = this._parseHexString(data);
-      this.writeChar.writeValue(data);
+      this._writeChar.writeValue(data);
     },
 
     _parseHexString: function(str) {
@@ -45,7 +46,7 @@
 
     _disconnectBleServer: function() {
       console.log('Disconnecting...');
-      return this.gatt.disconnect().then(() => {
+      return this._gatt.disconnect().then(() => {
         return this._bluetooth.defaultAdapter.stopDiscovery();
       }).then(() => {
         this.isConnected = false;
@@ -65,21 +66,23 @@
     _handleDevicefound: function(evt) {
       var devcie = evt.device;
       var gatt = devcie.gatt;
-      this.gatt = gatt;
+      this._gatt = gatt;
       if (devcie.address === this.address) {
+        this.name = devcie.name;
         gatt.connect().then(() => {
           return gatt.discoverServices();
         }).then(() => {
           var service = gatt.services.find(function(service) {
             return service.uuid === BLESHIELD_SERVICE_UUID;
           });
-          this.writeChar = service.characteristics.find(function(characteristic) {
+          this._writeChar = service.characteristics.find(function(characteristic) {
             return characteristic.uuid === BLESHIELD_RX_UUID;
           });
-          this.notifyChar = service.characteristics.find(function(characteristic) {
+          this._notifyChar = service.characteristics.find(function(characteristic) {
             return characteristic.uuid === BLESHIELD_TX_UUID;
           });
-          if (this.writeChar && Array.isArray(this.notifyChar.descriptors)) {
+
+          if (this._writeChar && Array.isArray(this._notifyChar.descriptors)) {
             console.log('bluetoothready');
             window.dispatchEvent(new CustomEvent('bluetoothready'));
             this.isConnected = true;
