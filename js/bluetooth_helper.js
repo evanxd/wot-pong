@@ -46,7 +46,7 @@
     _disconnectBleServer: function() {
       console.log('Disconnecting...');
       return this.gatt.disconnect().then(() => {
-        return his._bluetooth.defaultAdapter.stopDiscovery();
+        return this._bluetooth.defaultAdapter.stopDiscovery();
       }).then(() => {
         this.isConnected = false;
       });
@@ -81,6 +81,7 @@
           });
           if (this.writeChar && Array.isArray(this.notifyChar.descriptors)) {
             window.dispatchEvent(new CustomEvent('bluetoothready'));
+            this.isConnected = true;
             console.log('bluetoothready');
           } else {
             // XXX: Workaround to retry to connect the BLE server.
