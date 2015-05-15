@@ -1,0 +1,17 @@
+{
+  "name": "WoT Pong",
+  "type": "privileged",
+  "launch_path": "/index.html",
+  "description": "The Pong game implemented by WoT technology.",
+  "locales": {
+    "en-US": {
+      "name": "WoT Pong",
+      "description": "The Pong game implemented by WoT technology."
+    }
+  },
+  "default_locale": "en-US",
+  "orientation": "default",
+  "permissions": {
+    "bluetooth":{}
+  }
+}
