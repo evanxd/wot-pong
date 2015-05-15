@@ -1,12 +1,14 @@
+/* global BluetoothHelper */
+
 (function(exports) {
   'use strict';
 
   var MATRIX_WIDTH = 8;
   var MATRIX_HEIGHT = 8;
 
-  function LedMatrixHelper(bluetooth) {
+  function LedMatrixHelper(address) {
     this._initMatrix();
-    this._bluetooth = bluetooth;
+    this._bluetooth = new BluetoothHelper(address);
   }
 
   LedMatrixHelper.prototype = {
