@@ -1,0 +1,7 @@
+{
+  "browser": true,
+  "devel": true,
+  "esnext": true,
+  "globalstrict": true,
+  "maxlen": 80
+}

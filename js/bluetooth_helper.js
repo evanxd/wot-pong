@@ -1,6 +1,6 @@
-(function(exports) {
-  'use strict';
+'use strict';
 
+(function(exports) {
   var BLESHIELD_SERVICE_UUID = '713d0000-503e-4c75-ba94-3148f18d941e';
   var BLESHIELD_RX_UUID = '713d0003-503e-4c75-ba94-3148f18d941e';
   var BLESHIELD_TX_UUID = '713d0002-503e-4c75-ba94-3148f18d941e';
@@ -81,12 +81,14 @@
           var service = gatt.services.find(function(service) {
             return service.uuid === BLESHIELD_SERVICE_UUID;
           });
-          this._writeChar = service.characteristics.find(function(characteristic) {
-            return characteristic.uuid === BLESHIELD_RX_UUID;
-          });
-          this._notifyChar = service.characteristics.find(function(characteristic) {
-            return characteristic.uuid === BLESHIELD_TX_UUID;
-          });
+          this._writeChar =
+            service.characteristics.find(function(characteristic) {
+              return characteristic.uuid === BLESHIELD_RX_UUID;
+            });
+          this._notifyChar =
+            service.characteristics.find(function(characteristic) {
+              return characteristic.uuid === BLESHIELD_TX_UUID;
+            });
 
           if (this._writeChar && Array.isArray(this._notifyChar.descriptors)) {
             console.log('bluetoothready');

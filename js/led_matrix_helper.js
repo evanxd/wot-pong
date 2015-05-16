@@ -1,7 +1,7 @@
 /* global BluetoothHelper */
+'use strict';
 
 (function(exports) {
-  'use strict';
 
   var MATRIX_WIDTH = 8;
   var MATRIX_HEIGHT = 8;
