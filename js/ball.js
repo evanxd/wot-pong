@@ -35,7 +35,8 @@
       } else {
         this._direction.x = 1;
       }
-    } else if (y === 0 || y === 7) {
+    }
+    if (y === 0 || y === 7) {
       if (direction.y === 1) {
         this._direction.y = -1;
       } else {
