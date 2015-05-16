@@ -5,7 +5,7 @@
 (function() {
   var ledMatrix = new LedMatrixHelper('e1:09:43:ea:dd:68');
   var startButton = document.querySelector('#start');
-  var pong = new Pong();
+  var pong = new Pong(ledMatrix);
 
   window.addEventListener('bluetoothready', function() {
     startButton.addEventListener('click', function() {
