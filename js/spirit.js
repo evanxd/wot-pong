@@ -2,6 +2,7 @@
 
 (function(exports) {
   function Spirit(matrix, x, y) {
+    this._spirit = [1];
     this._matrix = matrix;
     this._x = x;
     this._y = y;
@@ -9,8 +10,8 @@
 
   Spirit.prototype = {
     isPaused: true,
-    _matrix: null,
     _spirit: null,
+    _matrix: null,
     _x: -1,
     _y: -1,
     _howToMove: null,
@@ -23,12 +24,10 @@
 
     move: function() {
       this.isPaused = false;
-      this._timerID = setInterval(this._howToMove, this._speed);
+      this._timerID = setInterval(this._doMoving, this._speed);
     },
 
-    setHowToMove: function(howToMove) {
-      this._howToMove = howToMove;
-    },
+    _doMoving: function() {},
 
     setSpeed: function(speed) {
       this._speed = speed;
