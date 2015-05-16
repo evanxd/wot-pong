@@ -37,11 +37,17 @@
     },
 
     _connectBleServer: function() {
-      this._bluetooth.defaultAdapter.startDiscovery().then(discovery => {
+      console.log('Connecting...');
+      this._bluetooth.defaultAdapter.startDiscovery().catch(() => {
+        // Retry to connect the BLE server if failed.
+        this._connectBleServer();
+      }).then(discovery => {
         discovery.addEventListener('devicefound',
           this._handleDevicefound.bind(this));
+      }).catch(() => {
+        // Retry to connect the BLE server if failed.
+        this._connectBleServer();
       });
-      console.log('Connecting...');
     },
 
     _disconnectBleServer: function() {
@@ -87,7 +93,7 @@
             window.dispatchEvent(new CustomEvent('bluetoothready'));
             this.isConnected = true;
           } else {
-            // XXX: Workaround to retry to connect the BLE server.
+            // Retry to connect the BLE server if failed.
             this._disconnectBleServer().then(() => {
               this._connectBleServer();
             });
