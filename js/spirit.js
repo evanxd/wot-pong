@@ -58,8 +58,8 @@
       var y = this._y;
       var collidedForX = false;
       var collidedForY = false;
-      if (x === 0 || x === 7 ||
-          matrix[x + 1][y] || matrix[x - 1][y]) {
+      if (x === 0 || x === 7 || !matrix[x + this._spirit.length] ||
+          matrix[x + this._spirit.length][y] || matrix[x - 1][y]) {
         collidedForX = true;
       }
       if (y === 0 || y === 7 ||
@@ -76,18 +76,25 @@
 
     control: function(config) {
       this.isPaused = false;
-      // TODO: Remember to remove the below listeners.
+      // XXX: FIXME
       window.addEventListener(config.left, () => {
         if (this.isPaused) {
           return;
         }
-        // TODO: Control the spirit.
+        if (!this._isCollided().x || this._x) {
+          this.draw(this._x - 1, this._y);
+        }
       });
+      // XXX: FIXME
       window.addEventListener(config.right, () =>  {
+        var matrix = this._canvas.matrix;
         if (this.isPaused) {
           return;
         }
-        // TODO: Control the spirit.
+        if (!this._isCollided().x ||
+            !matrix[this._x + this._spirit.length][this._y]) {
+          this.draw(this._x + 1, this._y);
+        }
       });
     }
   };
