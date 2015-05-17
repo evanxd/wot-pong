@@ -28,7 +28,7 @@
       // Clean previous state.
       if (this._x !== -1 && this._y !== -1) {
         for (i = 0; i < length; i++) {
-            canvas.matrix[this._x + i][this._y] = 0;
+          canvas.matrix[this._x + i][this._y] = 0;
         }
       }
       for (i = 0; i < length; i++) {
