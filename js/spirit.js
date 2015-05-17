@@ -19,14 +19,17 @@
       this._speed = speed;
     },
 
-    // TODO: Support any kind of spirit.
+    // TODO: Support two dimension spirit.
+    // Currently we only support one dimension spirit.
     draw: function(x, y) {
       var canvas = this._canvas;
-      // Clear previous state.
-      if (this._x !== -1 && this._y !== -1) {
-        canvas.matrix[this._x][this._y] = 0;  
-      }
-      canvas.matrix[x][y] = 1;
+      this._spirit.forEach((ele, i) => {
+        // Clean previous state.
+        if (this._x !== -1 && this._y !== -1) {
+          canvas.matrix[this._x + i][this._y] = 0;
+        }
+        canvas.matrix[x + i][y] = 1;
+      });
       canvas.render();
       this._x = x;
       this._y = y;
