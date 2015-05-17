@@ -14,6 +14,7 @@
     _y: -1,
     _timerID: null,
     _speed: 150,
+    _isEventListenerAdded: false,
 
     setSpeed: function(speed) {
       this._speed = speed;
@@ -84,26 +85,29 @@
 
     control: function(config) {
       this.isPaused = false;
-      window.addEventListener(config.left, () => {
-        if (this.isPaused) {
-          return;
-        }
-        if (!this._isCollided().x || this._x) {
-          this.draw(this._x - 1, this._y);
-        }
-      });
-      window.addEventListener(config.right, () =>  {
-        var matrix = this._canvas.matrix;
-        if (this.isPaused) {
-          return;
-        }
-        if (!this._isCollided().x ||
-            (matrix[this._x + this._spirit.length] &&
-             !matrix[this._x + this._spirit.length][this._y])
-        ) {
-          this.draw(this._x + 1, this._y);
-        }
-      });
+      if (!this._isEventListenerAdded) {
+        window.addEventListener(config.left, () => {
+          if (this.isPaused) {
+            return;
+          }
+          if (!this._isCollided().x || this._x) {
+            this.draw(this._x - 1, this._y);
+          }
+        });
+        window.addEventListener(config.right, () =>  {
+          var matrix = this._canvas.matrix;
+          if (this.isPaused) {
+            return;
+          }
+          if (!this._isCollided().x ||
+              (matrix[this._x + this._spirit.length] &&
+               !matrix[this._x + this._spirit.length][this._y])
+          ) {
+            this.draw(this._x + 1, this._y);
+          }
+        });
+      }
+      this._isEventListenerAdded = true;
     }
   };
 
