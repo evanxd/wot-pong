@@ -98,7 +98,9 @@
           return;
         }
         if (!this._isCollided().x ||
-            !matrix[this._x + this._spirit.length][this._y]) {
+            (matrix[this._x + this._spirit.length] &&
+             !matrix[this._x + this._spirit.length][this._y])
+        ) {
           this.draw(this._x + 1, this._y);
         }
       });
