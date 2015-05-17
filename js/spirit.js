@@ -23,13 +23,17 @@
     // Currently we only support one dimension spirit.
     draw: function(x, y) {
       var canvas = this._canvas;
-      this._spirit.forEach((ele, i) => {
-        // Clean previous state.
-        if (this._x !== -1 && this._y !== -1) {
-          canvas.matrix[this._x + i][this._y] = 0;
+      var length = this._spirit.length;
+      var i;
+      // Clean previous state.
+      if (this._x !== -1 && this._y !== -1) {
+        for (i = 0; i < length; i++) {
+            canvas.matrix[this._x + i][this._y] = 0;
         }
+      }
+      for (i = 0; i < length; i++) {
         canvas.matrix[x + i][y] = 1;
-      });
+      }
       canvas.render();
       this._x = x;
       this._y = y;
@@ -76,7 +80,6 @@
 
     control: function(config) {
       this.isPaused = false;
-      // XXX: FIXME
       window.addEventListener(config.left, () => {
         if (this.isPaused) {
           return;
@@ -85,7 +88,6 @@
           this.draw(this._x - 1, this._y);
         }
       });
-      // XXX: FIXME
       window.addEventListener(config.right, () =>  {
         var matrix = this._canvas.matrix;
         if (this.isPaused) {
