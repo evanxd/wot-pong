@@ -1,11 +1,9 @@
 'use strict';
 
 (function(exports) {
-  function Spirit(canvas, x, y) {
+  function Spirit(canvas) {
     this._spirit = [1];
     this._canvas = canvas;
-    this._x = x;
-    this._y = y;
   }
 
   Spirit.prototype = {
@@ -14,40 +12,80 @@
     _canvas: null,
     _x: -1,
     _y: -1,
-    _howToMove: null,
     _timerID: null,
     _speed: 300,
-
-    setSpirit: function(spirit) {
-      this._spirit = spirit;
-    },
-
-    move: function() {
-      this.isPaused = false;
-      this._timerID = setInterval(this._doMoving.bind(this), this._speed);
-    },
-
-    _doMoving: function() {},
-
-    // TODO: Support any kind of spirit.
-    draw: function(x, y) {
-      var canvas = this._canvas;
-      canvas.matrix[this._x][this._y] = 0;
-      canvas.matrix[x][y] = 1;
-      canvas.render();
-    },
 
     setSpeed: function(speed) {
       this._speed = speed;
     },
 
-    setControllable: function(config) {
+    // TODO: Support any kind of spirit.
+    draw: function(x, y) {
+      var canvas = this._canvas;
+      // Clear previous state.
+      if (this._x !== -1 && this._y !== -1) {
+        canvas.matrix[this._x][this._y] = 0;  
+      }
+      canvas.matrix[x][y] = 1;
+      canvas.render();
+      this._x = x;
+      this._y = y;
+    },
+
+    move: function() {
       this.isPaused = false;
+      this._timerID = setInterval(() => {
+        var x = this._x;
+        var y = this._y;
+        var isCollided = this._isCollided();
+        this._howToMove(isCollided);
+        x += this._direction.x;
+        y += this._direction.y;
+        this.draw(x, y);
+        this._x = x;
+        this._y = y;
+      }, this._speed);
+    },
+
+    _howToMove: function() {},
+
+    _isCollided: function() {
+      var matrix = this._canvas.matrix;
+      var x = this._x;
+      var y = this._y;
+      var collidedForX = false;
+      var collidedForY = false;
+      if (x === 0 || x === 7 ||
+          matrix[x + 1][y] || matrix[x - 1][y]) {
+        collidedForX = true;
+      }
+      if (y === 0 || y === 7 ||
+          matrix[x][y + 1] || matrix[x][y - 1]) {
+        collidedForY = true;
+      }
+      return { x: collidedForX, y: collidedForY };
     },
 
     pause: function() {
       this.isPaused = true;
       clearInterval(this._timerID);
+    },
+
+    control: function(config) {
+      this.isPaused = false;
+      // TODO: Remember to remove the below listeners.
+      window.addEventListener(config.left, () => {
+        if (this.isPaused) {
+          return;
+        }
+        // TODO: Control the spirit.
+      });
+      window.addEventListener(config.right, () =>  {
+        if (this.isPaused) {
+          return;
+        }
+        // TODO: Control the spirit.
+      });
     }
   };
 

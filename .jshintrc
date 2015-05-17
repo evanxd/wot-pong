@@ -2,6 +2,7 @@
   "browser": true,
   "devel": true,
   "esnext": true,
+  "expr": true,
   "globalstrict": true,
   "maxlen": 80
 }

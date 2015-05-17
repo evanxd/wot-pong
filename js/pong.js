@@ -5,24 +5,38 @@
 
 (function(exports) {
   function Pong(canvas) {
-    // this.paddle = new Paddle(canvas, 0, 7);
-    this._ball = new Ball(canvas, 0, 0);
+    // this._paddle = new Paddle(canvas);
+    this._ball = new Ball(canvas);
   }
 
   Pong.prototype = {
     isPaused: true,
-    // paddle: null,
+    // _paddle: null,
     _ball: null,
+    _initilized: false,
+
+    _init: function() {
+      if (this._initilized) {
+        return;
+      }
+      // this._paddle.draw(0, 7);
+      this._ball.draw(2, 1);
+      this._initilized = true;
+    },
 
     start: function() {
+      this._init();
       this._ball.move();
-      // this.paddle.setControllable();
+      // this._paddle.control({
+      //   left: 'move-paddle-left',
+      //   right: 'move-paddle-right',
+      // });
       this.isPaused = false;
     },
 
     pause: function() {
       this._ball.pause();
-      // this.paddle.pause();
+      // this._paddle.pause();
       this.isPaused = true;
     }
   };
