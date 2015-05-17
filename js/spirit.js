@@ -13,10 +13,14 @@
     _x: -1,
     _y: -1,
     _timerID: null,
-    _speed: 300,
+    _speed: 150,
 
     setSpeed: function(speed) {
       this._speed = speed;
+      if (!this.isPaused) {
+        this.pause();
+        this.move();
+      }
     },
 
     // TODO: Support two dimension spirit.

@@ -32,6 +32,7 @@
     rightButton.disabled = false;
   });
 
-  // For debugging.
+  // For debugging in run time.
   exports.ledMatrix = ledMatrix;
+  exports.pong = pong;
 }(window));
