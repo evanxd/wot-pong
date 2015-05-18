@@ -26,8 +26,8 @@
       if (this._initilized) {
         return;
       }
-      this._ball.draw(2, 1);
-      this._paddle1.draw(5, 7);
+      this._ball.draw(Math.floor(Math.random() * 6), 1);
+      this._paddle1.draw(Math.floor(Math.random() * 5), 7);
       // this._paddle2.draw(5, 0);
       this._startTimer();
       this._initilized = true;
