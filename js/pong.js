@@ -10,7 +10,7 @@
     this._canvas = canvas;
     this._ball = new Ball(canvas);
     this._paddle1 = new Paddle(canvas);
-    this._paddle2 = new Paddle(canvas);
+    // this._paddle2 = new Paddle(canvas);
   }
 
   Pong.prototype = {
@@ -26,8 +26,8 @@
         return;
       }
       this._ball.draw(2, 1);
-      this._paddle1.draw(5, 0);
-      this._paddle2.draw(5, 7);
+      this._paddle1.draw(5, 7);
+      // this._paddle2.draw(5, 0);
       this._startGameoverChecker();
       this._initilized = true;
     },
@@ -40,14 +40,14 @@
         right: 'move-paddle-right',
       };
       this._paddle1.control(config);
-      this._paddle2.control(config);
+      // this._paddle2.control(config);
       this.isPaused = false;
     },
 
     pause: function() {
       this._ball.pause();
       this._paddle1.pause();
-      this._paddle2.pause();
+      // this._paddle2.pause();
       this.isPaused = true;
     },
 

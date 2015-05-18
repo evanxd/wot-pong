@@ -3,6 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
     <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/style/index.css">
     <script defer src="js/bluetooth_helper.js"></script>
     <script defer src="js/led_matrix_helper.js"></script>
     <script defer src="js/spirit.js"></script>
@@ -13,8 +14,10 @@
     <title>WoT Pong</title>
   </head>
   <body>
+    <button id="disconnect">Disconnect</button>
     <button id="start" disabled>Start</button>
-    <button id="left" disabled>Left</button>
-    <button id="right" disabled>Right</button>
+    <div id="message"></div>
+    <button id="left">Left</button>
+    <button id="right">Right</button>
   </body>
 </html>
