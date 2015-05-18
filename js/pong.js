@@ -55,7 +55,10 @@
     _startTimer: function() {
       this._timerID = setInterval(() => {
         this._checkGameover();
-        if (this._paddle1._y - this._ball._y === 1) {
+        if (this._paddle1._y - this._ball._y === 1 &&
+            this._ball._x - this._paddle1._x >= 0 &&
+            this._ball._x - this._paddle1._x < 3) {
+          new Audio('resources/sounds/hit-ball.ogg').play();
           navigator.vibrate([150]);
         }
       }, 150);
@@ -64,6 +67,7 @@
     _checkGameover: function() {
       if (this._ball._y === MATRIX_HEIGHT - 1) {
         this.pause();
+        new Audio('resources/sounds/game-over.ogg').play();
         navigator.vibrate([1000]);
         this._initilized = false;
         clearInterval(this._timerID);
