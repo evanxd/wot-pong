@@ -38,7 +38,7 @@
 
     _connectBleServer: function() {
       console.log('Connecting...');
-      this._bluetooth.defaultAdapter.startDiscovery().catch(() => {
+      return this._bluetooth.defaultAdapter.startDiscovery().catch(() => {
         // Retry to connect the BLE server if failed.
         this._connectBleServer();
       }).then(discovery => {
@@ -52,11 +52,15 @@
 
     _disconnectBleServer: function() {
       console.log('Disconnecting...');
-      return this._gatt.disconnect().then(() => {
-        return this._bluetooth.defaultAdapter.stopDiscovery();
-      }).then(() => {
-        this.isConnected = false;
-      });
+      if (this._gatt) {
+        return this._gatt.disconnect().then(() => {
+          return this._bluetooth.defaultAdapter.stopDiscovery();
+        }).then(() => {
+          this.isConnected = false;
+        });
+      } else {
+        return Promise.resolve(); 
+      }
     },
 
     _handleBluetoothAttributechanged: function(evt) {
@@ -97,7 +101,7 @@
           } else {
             // Retry to connect the BLE server if failed.
             this._disconnectBleServer().then(() => {
-              this._connectBleServer();
+              return this._connectBleServer();
             });
           }
         });

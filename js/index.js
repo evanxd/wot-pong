@@ -5,7 +5,7 @@
 (function(exports) {
   var ledMatrix = new LedMatrixHelper('e1:09:43:ea:dd:68');
   var pong = new Pong(ledMatrix);
-  var disconnectButton = document.querySelector('#disconnect');
+  var reconnectButton = document.querySelector('#reconnect');
   var startButton = document.querySelector('#start');
   var leftButton = document.querySelector('#left');
   var rightButton = document.querySelector('#right');
@@ -19,9 +19,12 @@
     window.dispatchEvent(new CustomEvent('move-paddle-right'));
   });
 
-  disconnectButton.addEventListener('click', function() {
+  reconnectButton.addEventListener('click', function() {
+    message.innerHTML = 'Pixel is reconnecting...';
     var bluetooth = ledMatrix._bluetooth;
-    bluetooth.isConnected && bluetooth._disconnectBleServer();
+    bluetooth._disconnectBleServer().then(() => {
+      return bluetooth._connectBleServer();
+    });
   });
 
   startButton.addEventListener('click', function() {
