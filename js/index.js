@@ -42,6 +42,12 @@
     startButton.disabled = false;
   });
 
+  // Need to disconnect BLE before app is closed,
+  // or FxOS will just be crashed.
+  window.addEventListener('close', function() {
+    ledMatrix._bluetooth._disconnectBleServer();
+  });
+
   // For debugging in run time.
   exports.ledMatrix = ledMatrix;
   exports.pong = pong;
