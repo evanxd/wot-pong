@@ -15,6 +15,7 @@
 
   Pong.prototype = {
     isPaused: true,
+    _timerID: null,
     _canvas: null,
     _paddle1: null,
     _paddle2: null,
@@ -28,7 +29,7 @@
       this._ball.draw(2, 1);
       this._paddle1.draw(5, 7);
       // this._paddle2.draw(5, 0);
-      this._startGameoverChecker();
+      this._startTimer();
       this._initilized = true;
     },
 
@@ -51,15 +52,23 @@
       this.isPaused = true;
     },
 
-    _startGameoverChecker: function() {
-      var timerID = setInterval(() => {
-        if (this._ball._y === MATRIX_HEIGHT - 1) {
-          this.pause();
-          this._initilized = false;
-          clearInterval(timerID);
-          console.log('Game Over!');
+    _startTimer: function() {
+      this._timerID = setInterval(() => {
+        this._checkGameover();
+        if (this._paddle1._y - this._ball._y === 1) {
+          navigator.vibrate([150]);
         }
       }, 150);
+    },
+
+    _checkGameover: function() {
+      if (this._ball._y === MATRIX_HEIGHT - 1) {
+        this.pause();
+        navigator.vibrate([1000]);
+        this._initilized = false;
+        clearInterval(this._timerID);
+        console.log('Game Over!');
+      }
     }
   };
 
