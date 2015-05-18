@@ -9,8 +9,9 @@
       "description": "The Pong game implemented by WoT technology."
     }
   },
+  "fullscreen": "true",
   "default_locale": "en-US",
-  "orientation": "default",
+  "orientation": "landscape-primary",
   "permissions": {
     "bluetooth":{}
   }
