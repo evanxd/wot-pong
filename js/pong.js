@@ -70,7 +70,7 @@
       if (this._ball._y === MATRIX_HEIGHT - 1) {
         this.pause();
         new Audio('resources/sounds/game-over.ogg').play();
-        navigator.vibrate([1000]);
+        navigator.vibrate([3000]);
         this._initilized = false;
         clearInterval(this._timerID);
         console.log('Game Over!');
