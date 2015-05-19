@@ -11,11 +11,13 @@
     this._ball = new Ball(canvas);
     this._paddle1 = new Paddle(canvas);
     // this._paddle2 = new Paddle(canvas);
+    this._speed = this._ball.getSpeed();
   }
 
   Pong.prototype = {
     isPaused: true,
     _timerID: null,
+    _speed: null,
     _canvas: null,
     _paddle1: null,
     _paddle2: null,
@@ -61,7 +63,7 @@
           new Audio('resources/sounds/hit-ball.ogg').play();
           navigator.vibrate([150]);
         }
-      }, 150);
+      }, this._speed);
     },
 
     _checkGameover: function() {

@@ -8,6 +8,7 @@
     this._direction = {
       x: 1, y: 1
     };
+    this.setSpeed(300);
   }
 
   Ball.prototype = Object.create(Spirit.prototype);

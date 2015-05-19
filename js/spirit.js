@@ -24,6 +24,10 @@
       }
     },
 
+    getSpeed: function() {
+      return this._speed;
+    },
+
     // TODO: Support two dimension spirit.
     // Currently we only support one dimension spirit.
     draw: function(x, y) {
