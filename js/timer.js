@@ -29,17 +29,17 @@
     },
 
     start: function() {
-      this._timerID = setInterval(function() {
-        this._actions.forEach(function(action) {
-          action();
-        });
-      }.bind(this), this._speed);
       this._isPaused = false;
+      this._timerID = setInterval(() => {
+        this._actions.forEach((action) => {
+          !this.isPaused && action();
+        });
+      }, this._speed);
     },
 
     pause: function() {
-      clearInterval(this._timerID);
       this._isPaused = true;
+      clearInterval(this._timerID);
     }
   };
 
