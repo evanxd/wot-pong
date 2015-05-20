@@ -80,32 +80,34 @@
       if (devcie.address === this.address) {
         this.name = devcie.name;
         gatt.connect().then(() => {
-          return gatt.discoverServices();
-        }).then(() => {
-          var service = gatt.services.find(function(service) {
-            return service.uuid === BLESHIELD_SERVICE_UUID;
-          });
-          this._writeChar =
-            service.characteristics.find(function(characteristic) {
-              return characteristic.uuid === BLESHIELD_RX_UUID;
-            });
-          this._notifyChar =
-            service.characteristics.find(function(characteristic) {
-              return characteristic.uuid === BLESHIELD_TX_UUID;
-            });
-
-          if (this._writeChar && Array.isArray(this._notifyChar.descriptors)) {
-            console.log('bluetoothready');
-            window.dispatchEvent(new CustomEvent('bluetoothready'));
-            this.isConnected = true;
-          } else {
-            // Retry to connect the BLE server if failed.
-            this._disconnectBleServer().then(() => {
-              return this._connectBleServer();
-            });
-          }
+          return this._discoverServices(gatt);
         });
       }
+    },
+
+    _discoverServices: function(gatt) {
+      return gatt.discoverServices().then(() => {
+        var service = gatt.services.find(function(service) {
+          return service.uuid === BLESHIELD_SERVICE_UUID;
+        });
+        this._writeChar =
+          service.characteristics.find(function(characteristic) {
+            return characteristic.uuid === BLESHIELD_RX_UUID;
+          });
+        this._notifyChar =
+          service.characteristics.find(function(characteristic) {
+            return characteristic.uuid === BLESHIELD_TX_UUID;
+          });
+
+        if (this._writeChar && Array.isArray(this._notifyChar.descriptors)) {
+          console.log('bluetoothready');
+          window.dispatchEvent(new CustomEvent('bluetoothready'));
+          this.isConnected = true;
+        } else {
+          console.log('Discovering services...');
+          this._discoverServices(gatt);
+        }
+      });
     }
   };
 
