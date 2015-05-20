@@ -13,7 +13,7 @@
     this._timer = new Timer(DEFAULT_SPEED);
     this._ball = new Ball(canvas, this._timer);
     this._paddle1 = new Paddle(canvas, this._timer);
-    // this._paddle2 = new Paddle(canvas);
+    this._paddle2 = new Paddle(canvas, this._timer);
     this._init();
   }
 
@@ -31,6 +31,8 @@
 
     _init: function() {
       this._timer.addAction(function() {
+        var ball = this._ball;
+        var paddle2 = this._paddle2;
         var timer = this._timer;
         var speed = this._timer.speed;
         this._checkGameover();
@@ -45,18 +47,27 @@
             timer.start();
           }
         }
+        if (paddle2._x > ball._x) {
+          window.dispatchEvent(new CustomEvent('move-paddle2-left'));
+        } else if (paddle2._x < ball._x) {
+          window.dispatchEvent(new CustomEvent('move-paddle2-right'));
+        }
       }.bind(this));
       this._ball.move();
       this._paddle1.control({
-        left: 'move-paddle-left',
-        right: 'move-paddle-right',
+        left: 'move-paddle1-left',
+        right: 'move-paddle1-right',
+      });
+      this._paddle2.control({
+        left: 'move-paddle2-left',
+        right: 'move-paddle2-right', 
       });
     },
 
     start: function() {
-      this._ball.draw(Math.floor(Math.random() * 6), 1);
+      this._ball.draw(Math.floor(Math.random() * 6), 3);
       this._paddle1.draw(Math.floor(Math.random() * 5), 7);
-      // this._paddle2.draw(5, 0);
+      this._paddle2.draw(Math.floor(Math.random() * 5), 0);
       this._timer.speed = DEFAULT_SPEED;
       this._timer.start();
     },
@@ -75,9 +86,12 @@
     },
 
     _isBallHit: function() {
-      return this._paddle1._y - this._ball._y === 1 &&
+      return (this._paddle1._y - this._ball._y === 1 &&
         this._ball._x - this._paddle1._x >= 0 &&
-        this._ball._x - this._paddle1._x < 3;
+        this._ball._x - this._paddle1._x < 3) ||
+       (this._ball._y - this._paddle2._y === 1 &&
+        this._ball._x - this._paddle2._x >= 0 &&
+        this._ball._x - this._paddle2._x < 3);
     }
   };
 

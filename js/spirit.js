@@ -49,7 +49,7 @@
       }.bind(this));
     },
 
-    _howToMove: function() {},
+    _howToMove: function(isCollided) {},
 
     _isCollided: function() {
       var matrix = this._canvas.matrix;

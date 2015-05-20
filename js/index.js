@@ -12,11 +12,11 @@
   var message = document.querySelector('#message');
 
   leftButton.addEventListener('click', function() {
-    window.dispatchEvent(new CustomEvent('move-paddle-left'));
+    window.dispatchEvent(new CustomEvent('move-paddle1-left'));
   });
 
   rightButton.addEventListener('click', function() {
-    window.dispatchEvent(new CustomEvent('move-paddle-right'));
+    window.dispatchEvent(new CustomEvent('move-paddle1-right'));
   });
 
   reconnectButton.addEventListener('click', function() {
