@@ -1,32 +1,19 @@
 'use strict';
 
 (function(exports) {
-  function Spirit(canvas) {
-    this._spirit = [1];
+  function Spirit(canvas, timer) {
     this._canvas = canvas;
+    this._timer = timer;
+    this._spirit = [1];
   }
 
   Spirit.prototype = {
-    isPaused: true,
     _spirit: null,
     _canvas: null,
+    _timer: null,
     _x: -1,
     _y: -1,
-    _timerID: null,
-    _speed: 150,
     _isEventListenerAdded: false,
-
-    setSpeed: function(speed) {
-      this._speed = speed;
-      if (!this.isPaused) {
-        this.pause();
-        this.move();
-      }
-    },
-
-    getSpeed: function() {
-      return this._speed;
-    },
 
     // TODO: Support two dimension spirit.
     // Currently we only support one dimension spirit.
@@ -49,8 +36,7 @@
     },
 
     move: function() {
-      this.isPaused = false;
-      this._timerID = setInterval(() => {
+      this._timer.addAction(function() {
         var x = this._x;
         var y = this._y;
         var isCollided = this._isCollided();
@@ -60,7 +46,7 @@
         this.draw(x, y);
         this._x = x;
         this._y = y;
-      }, this._speed);
+      }.bind(this));
     },
 
     _howToMove: function() {},
@@ -82,16 +68,10 @@
       return { x: collidedForX, y: collidedForY };
     },
 
-    pause: function() {
-      this.isPaused = true;
-      clearInterval(this._timerID);
-    },
-
     control: function(config) {
-      this.isPaused = false;
       if (!this._isEventListenerAdded) {
         window.addEventListener(config.left, () => {
-          if (this.isPaused) {
+          if (this._timer.isPaused) {
             return;
           }
           if (!this._isCollided().x || this._x) {
@@ -100,7 +80,7 @@
         });
         window.addEventListener(config.right, () =>  {
           var matrix = this._canvas.matrix;
-          if (this.isPaused) {
+          if (this._timer.isPaused) {
             return;
           }
           if (!this._isCollided().x ||
