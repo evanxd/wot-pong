@@ -6,6 +6,7 @@
   var ledMatrix = new LedMatrixHelper('e1:09:43:ea:dd:68');
   var pong = new Pong(ledMatrix);
   var reconnectButton = document.querySelector('#reconnect');
+  var demoButton = document.querySelector('#demo');
   var startButton = document.querySelector('#start');
   var leftButton = document.querySelector('#left');
   var rightButton = document.querySelector('#right');
@@ -25,6 +26,11 @@
     bluetooth._disconnectBleServer().then(() => {
       return bluetooth._connectBleServer();
     });
+  });
+
+  demoButton.addEventListener('click', function() {
+    !pong.isPaused && pong.pause();
+    pong.start({ isDemoMode: true });
   });
 
   startButton.addEventListener('click', function() {

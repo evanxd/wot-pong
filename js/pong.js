@@ -23,7 +23,7 @@
     _ball: null,
     _paddle1: null,
     _paddle2: null,
-    _initilized: false,
+    _isDemoMode: false,
 
     get isPaused() {
       return this._timer.isPaused;
@@ -31,8 +31,6 @@
 
     _init: function() {
       this._timer.addAction(function() {
-        var ball = this._ball;
-        var paddle2 = this._paddle2;
         var timer = this._timer;
         var speed = this._timer.speed;
         this._checkGameover();
@@ -47,11 +45,8 @@
             timer.start();
           }
         }
-        if (paddle2._x > ball._x) {
-          window.dispatchEvent(new CustomEvent('move-paddle2-left'));
-        } else if (paddle2._x < ball._x) {
-          window.dispatchEvent(new CustomEvent('move-paddle2-right'));
-        }
+        this._isDemoMode && this._doPaddle1AI();
+        this._doPaddle2AI();
       }.bind(this));
       this._ball.move();
       this._paddle1.control({
@@ -64,7 +59,12 @@
       });
     },
 
-    start: function() {
+    start: function(options) {
+      if (options && options.isDemoMode) {
+        this._isDemoMode = options.isDemoMode;
+      } else {
+        this._isDemoMode = false;
+      }
       this._ball.draw(Math.floor(Math.random() * 6), 3);
       this._paddle1.draw(Math.floor(Math.random() * 5), 7);
       this._paddle2.draw(Math.floor(Math.random() * 5), 0);
@@ -92,7 +92,27 @@
        (this._ball._y - this._paddle2._y === 1 &&
         this._ball._x - this._paddle2._x >= 0 &&
         this._ball._x - this._paddle2._x < 3);
-    }
+    },
+
+    _doPaddle1AI: function() {
+      var ball = this._ball;
+      var paddle1 = this._paddle1;
+      if (paddle1._x > ball._x) {
+        window.dispatchEvent(new CustomEvent('move-paddle1-left'));
+      } else if (paddle1._x < ball._x) {
+        window.dispatchEvent(new CustomEvent('move-paddle1-right'));
+      }
+    },
+
+    _doPaddle2AI: function() {
+      var ball = this._ball;
+      var paddle2 = this._paddle2;
+      if (paddle2._x > ball._x) {
+        window.dispatchEvent(new CustomEvent('move-paddle2-left'));
+      } else if (paddle2._x < ball._x) {
+        window.dispatchEvent(new CustomEvent('move-paddle2-right'));
+      }
+    },
   };
 
   exports.Pong = Pong;
