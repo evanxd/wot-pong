@@ -43,7 +43,7 @@
           navigator.vibrate([150]);
           // Ball speed will be faster and faster
           // after player hits ball more and more times.
-          if (speed >= 100) {
+          if (speed >= 50) {
             timer.speed = speed - 25;
             timer.pause();
             timer.start();
