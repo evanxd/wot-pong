@@ -49,6 +49,9 @@
             timer.start();
           }
           this._hitBallTimes++;
+
+          var countDown = 10 - this._hitBallTimes;
+          new Audio('resources/sounds/' + countDown + '.wav').play();
         }
         if (this._isBallHitByPaddle2()) {
           paddle2Sound.play();
