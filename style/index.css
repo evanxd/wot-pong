@@ -16,3 +16,7 @@ html, body {
   width: 280;
   height: 250; 
 }
+
+button {
+    font-size: 1em;
+}
