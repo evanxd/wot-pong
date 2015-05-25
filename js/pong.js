@@ -24,27 +24,40 @@
     _paddle1: null,
     _paddle2: null,
     _isDemoMode: false,
+    _hitBallTimes: 0,
 
     get isPaused() {
       return this._timer.isPaused;
     },
 
     _init: function() {
+      var paddle1Sound = new Audio('resources/sounds/adoken.wav');
+      var paddle2Sound = new Audio('resources/sounds/soluken.wav');
       this._timer.addAction(function() {
+        this._checkGameover();
+
         var timer = this._timer;
         var speed = this._timer.speed;
-        this._checkGameover();
-        if (this._isBallHit()) {
-          new Audio('resources/sounds/hit-ball.ogg').play();
+        if (this._isBallHitByPaddle1()) {
+          paddle1Sound.play();
           navigator.vibrate([150]);
           // Ball speed will be faster and faster
           // after player hits ball more and more times.
           if (speed >= 100) {
-            timer.speed = speed - 20;
+            timer.speed = speed - 50;
             timer.pause();
             timer.start();
           }
+          this._hitBallTimes++;
+
+          var countDown = 10 - this._hitBallTimes;
+          new Audio('resources/sounds/' + countDown + '.wav').play();
         }
+        if (this._isBallHitByPaddle2()) {
+          paddle2Sound.play();
+          navigator.vibrate([150]);
+        }
+
         this._isDemoMode && this._doPaddle1AI();
         this._doPaddle2AI();
       }.bind(this));
@@ -77,21 +90,34 @@
     },
 
     _checkGameover: function() {
+      if (this._isDemoMode) {
+        return;
+      }
       if (this._ball._y === MATRIX_HEIGHT - 1) {
+        console.log('You lose!');
         this._timer.pause();
-        new Audio('resources/sounds/game-over.ogg').play();
-        navigator.vibrate([3000]);
-        console.log('Game Over!');
+        new Audio('resources/sounds/dead.wav').play();
+        navigator.vibrate([2000]);
+        this._hitBallTimes = 0;
+      } else if (this._hitBallTimes === 10) {
+        console.log('You win!');
+        this._timer.pause();
+        new Audio('resources/sounds/win.wav').play();
+        navigator.vibrate([1000, 500, 1000]);
+        this._hitBallTimes = 0;
       }
     },
 
-    _isBallHit: function() {
+    _isBallHitByPaddle1: function() {
       return (this._paddle1._y - this._ball._y === 1 &&
         this._ball._x - this._paddle1._x >= 0 &&
-        this._ball._x - this._paddle1._x < 3) ||
-       (this._ball._y - this._paddle2._y === 1 &&
+        this._ball._x - this._paddle1._x < 3);
+    },
+
+    _isBallHitByPaddle2: function() {
+      return this._ball._y - this._paddle2._y === 1 &&
         this._ball._x - this._paddle2._x >= 0 &&
-        this._ball._x - this._paddle2._x < 3);
+        this._ball._x - this._paddle2._x < 3;
     },
 
     _doPaddle1AI: function() {
