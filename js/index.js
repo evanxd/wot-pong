@@ -25,7 +25,6 @@
     message.innerHTML = 'Pixel is disconnecting...';
     var bluetooth = ledMatrix._bluetooth;
     bluetooth._disconnectBleServer().then(() => {
-      return bluetooth._connectBleServer();
     });
   });
   reconnectButton.addEventListener('click', function() {

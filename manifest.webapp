@@ -3,6 +3,11 @@
   "type": "privileged",
   "launch_path": "/index.html",
   "description": "The Pong game implemented by WoT technology.",
+  "icons": {
+    "16": "/img/icons/icon_16.png",
+    "48": "/img/icons/icon_48.png",
+    "128": "/img/icons/icon_128.png"
+  },
   "locales": {
     "en-US": {
       "name": "WoT Pong",
