@@ -17,6 +17,7 @@
     name: null,
     isConnected: false,
     _bluetooth: null,
+    _conn: null,
     _gatt: null,
     _writeChar: null,
     _notifyChar: null,
@@ -38,15 +39,19 @@
 
     _connectBleServer: function() {
       console.log('Connecting...');
-      return this._bluetooth.defaultAdapter.startDiscovery().catch(() => {
+//      return this._bluetooth.defaultAdapter.startDiscovery().catch(() => {
+      return this._bluetooth.defaultAdapter.startLeScan([]).catch(() => {
         // Retry to connect the BLE server if failed.
-        this._connectBleServer();
+        console.info('Connection failed!');
+        setTimeout(this._connectBleServer, 1000);
       }).then(discovery => {
+        this._conn = discovery;
         discovery.addEventListener('devicefound',
           this._handleDevicefound.bind(this));
       }).catch(() => {
         // Retry to connect the BLE server if failed.
-        this._connectBleServer();
+        console.info('Connection failed!');
+        setTimeout(this._connectBleServer, 1000);
       });
     },
 
@@ -54,7 +59,8 @@
       console.log('Disconnecting...');
       if (this._gatt) {
         return this._gatt.disconnect().then(() => {
-          return this._bluetooth.defaultAdapter.stopDiscovery();
+//          return this._bluetooth.defaultAdapter.stopDiscovery();
+          return this._bluetooth.defaultAdapter.stopLeScan(this._conn);
         }).then(() => {
           this.isConnected = false;
         });
@@ -74,11 +80,13 @@
     },
 
     _handleDevicefound: function(evt) {
-      var devcie = evt.device;
-      var gatt = devcie.gatt;
+      var device = evt.device;
+      console.log(device);
+      var gatt = device.gatt;
       this._gatt = gatt;
-      if (devcie.address === this.address) {
-        this.name = devcie.name;
+      if (device.address === this.address) {
+        this.name = device.name;
+        this._bluetooth.defaultAdapter.stopLeScan(this._conn);
         gatt.connect().then(() => {
           return this._discoverServices(gatt);
         });
