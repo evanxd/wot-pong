@@ -1,0 +1,20 @@
+{
+  "name": "WoT Pong",
+  "version": "0.0.1",
+  "homepage": "https://github.com/evanxd/wot-pong",
+  "authors": [
+    "Evan Xd <itoyxd@gmail.com>"
+  ],
+  "description": "The Pong game implemented by WoT technology.",
+  "keywords": [
+    "game",
+    "pong",
+    "FxOS",
+    "bluetooth",
+    "ble"
+  ],
+  "license": "Apache License 2.0",
+  "dependencies": {
+    "bluetooth-helper": "0.0.1"
+  }
+}
