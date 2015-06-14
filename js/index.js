@@ -3,7 +3,8 @@
 'use strict';
 
 (function(exports) {
-  var ledMatrix = new LedMatrixHelper('e1:09:43:ea:dd:68');
+  var ledMatrix = new LedMatrixHelper({ address: 'e1:09:43:ea:dd:68' });
+  var bluetooth = ledMatrix.bluetooth;
   var pong = new Pong(ledMatrix);
   var reconnectButton = document.querySelector('#reconnect');
   var demoButton = document.querySelector('#demo');
@@ -22,9 +23,8 @@
 
   reconnectButton.addEventListener('click', function() {
     message.innerHTML = 'Pixel is reconnecting...';
-    var bluetooth = ledMatrix._bluetooth;
-    bluetooth._disconnectBleServer().then(() => {
-      return bluetooth._connectBleServer();
+    bluetooth._disconnect().then(() => {
+      return bluetooth._connect();
     });
   });
 
@@ -39,8 +39,7 @@
   });
 
   message.innerHTML = 'Pixel is connecting...';
-  window.addEventListener('bluetoothready', function bluetoothreadyHandler() {
-    window.removeEventListener('bluetoothready', bluetoothreadyHandler);
+  bluetooth.on('connected', function() {
     message.innerHTML = 'Pixel is connected.';
     newButton.disabled = false;
   });
@@ -48,7 +47,7 @@
   // Need to disconnect BLE before app is closed,
   // or FxOS will just be crashed.
   window.addEventListener('close', function() {
-    ledMatrix._bluetooth._disconnectBleServer();
+    bluetooth._disconnect();
   });
 
   // For debugging in run time.

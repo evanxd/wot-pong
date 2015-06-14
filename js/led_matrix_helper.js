@@ -6,14 +6,14 @@
   var MATRIX_WIDTH = 8;
   var MATRIX_HEIGHT = 8;
 
-  function LedMatrixHelper(address) {
+  function LedMatrixHelper(options) {
     this._initMatrix();
-    this._bluetooth = new BluetoothHelper(address);
+    this.bluetooth = new BluetoothHelper(options);
   }
 
   LedMatrixHelper.prototype = {
     matrix: null,
-    _bluetooth: null,
+    bluetooth: null,
 
     render: function() {
       var data = '';
@@ -29,7 +29,7 @@
                 this._paddingLeft(value.toString(16), 2);
       }
       console.log('LED Matrix data: ' + data);
-      this._bluetooth.sendData(data);
+      this.bluetooth.send(data);
     },
 
     _paddingLeft: function(str, lenght) {
